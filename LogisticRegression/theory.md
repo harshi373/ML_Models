@@ -91,5 +91,54 @@ and **0** otherwise. This threshold (0.5) can be adjusted based on application n
 - It optimizes the model using **binary cross-entropy loss** and **gradient descent**.
 - It provides a clear **decision boundary** for classification tasks.
 
-This forms the theoretical foundation of Logistic Regression and its internal working principles.
+**Logistic Regression can be extended to multiclass classification**, but the standard form is only for **binary classification**. To handle **multiple classes (more than two)**, we use two common strategies:
+
+---
+
+### **1. One-vs-Rest (OvR) / One-vs-All (OvA)**
+- This approach trains **multiple binary logistic regression models**, one for each class.
+- For **K classes**, we train **K binary classifiers**, each distinguishing **one class vs. all others**.
+- The final class is chosen based on the highest probability.
+
+🔹 **Example**: Suppose we have **3 classes**: `A, B, C`  
+- Train 3 models:
+  - Model 1: Classify A vs. (B, C)
+  - Model 2: Classify B vs. (A, C)
+  - Model 3: Classify C vs. (A, B)
+- For a new input, the model with the **highest probability wins**.
+
+**Pros**: Simple, works well with logistic regression  
+**Cons**: Independent classifiers may lead to inconsistencies  
+
+---
+
+### **2. Softmax Regression (Multinomial Logistic Regression)**
+- Instead of **multiple binary classifiers**, this method **generalizes logistic regression** to directly classify into multiple classes.
+- Uses the **softmax function** to compute probabilities for each class:
+
+\[
+P(y = k | X) = \frac{e^{W_k^T X + b_k}}{\sum_{j=1}^{K} e^{W_j^T X + b_j}}
+\]
+
+where:
+- \( K \) is the number of classes
+- \( W_k \) and \( b_k \) are the weight vector and bias for class \( k \)
+- The denominator ensures probabilities sum to **1**.
+
+🔹 **Example**: If we have **3 classes (A, B, C)** and an input **X**,  
+Softmax will return probabilities:  
+- P(A) = 0.2  
+- P(B) = 0.5  
+- P(C) = 0.3  
+
+We assign the input to **Class B** since it has the highest probability.
+
+ **Pros**: More consistent than OvR, works well for multiclass classification  
+ **Cons**: Computationally expensive for many classes  
+
+---
+
+### **Which One to Use?**
+- **One-vs-Rest (OvR)**: Works well for smaller datasets, easier to implement.
+- **Softmax Regression**: Preferred for deep learning and large datasets.
 
